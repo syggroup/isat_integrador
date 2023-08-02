@@ -306,11 +306,11 @@ class OrdensModel {
     return 0;
   }
 
-  async retornoIsat({ ordem, situacao }) {
+  async retornoIsat({ ordem, situacao, movimenta_cacamba }) {
     await this.db.query("SET client_encoding TO 'UTF-8'");
 
     const result_ordem = await this.db.query(`
-      SELECT retorno_isat FROM ordem WHERE ordem=${ordem}
+      SELECT retorno_isat, trim(cli_for) as tipo FROM ordem WHERE ordem=${ordem}
     `);
 
     if (result_ordem[1].rowCount > 0) {
@@ -318,6 +318,12 @@ class OrdensModel {
         await this.db.query(
           `UPDATE ordem SET retorno_isat='${situacao}' WHERE ordem=${ordem}`
         );
+
+        if (movimenta_cacamba && result_ordem[1].rows[0].tipo === 'EMBARQUE' && situacao.trim() === 'ENCERRADA NO DRIVERSAT') {
+          await this.db.query(
+            `UPDATE ordem SET status='F', obs='FINALIZADO' WHERE ordem=${ordem}`
+          );
+        }
       }
     }
 

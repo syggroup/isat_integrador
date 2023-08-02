@@ -67,7 +67,7 @@ function createIconAndTray() {
 
   global_config.tray = new Tray(global_config.iconpath);
 
-  global_config.tray.setToolTip("Sagi - Integração iSat");
+  global_config.tray.setToolTip(`Sagi - Integração iSat (${app.getVersion()})`);
   global_config.tray.setContextMenu(
     Menu.buildFromTemplate([
       {
@@ -256,7 +256,6 @@ async function startService() {
       }`,
       type: "generals",
     });
-
     clearTimeout(global_config.timeout_run_all_services);
     clearTimeout(global_config.timeout_verify_sagi_update);
     clearTimeout(global_config.timeout_start_service);
@@ -277,13 +276,13 @@ function automaticCheckForUpdates() {
       }`,
       type: "generals",
     });
-  } finally {
-    clearTimeout(global_config.timeout_automatic_check_for_updates);
-    global_config.timeout_automatic_check_for_updates = setTimeout(
-      () => automaticCheckForUpdates(),
-      1800000
-    );
-  }
+  } //finally {
+    //clearTimeout(global_config.timeout_automatic_check_for_updates);
+    //global_config.timeout_automatic_check_for_updates = setTimeout(
+    //  () => automaticCheckForUpdates(),
+    //  1800000
+    //);
+  //}
 }
 
 app.whenReady().then(async () => {
@@ -348,7 +347,7 @@ async function loadSplashScreenAndQuitApp() {
           global_config.window_splash.show();
         }
 
-        if (global_config.isRunning.value) {
+        /* if (global_config.isRunning.value) {
           try {
             const db = await new Database().getConnection();
 
@@ -361,7 +360,7 @@ async function loadSplashScreenAndQuitApp() {
               await db.close();
             }
           } catch(err) {}
-        }
+        } */
 
         setTimeout(() => {
           app.isQuiting = true;
@@ -404,6 +403,7 @@ autoUpdater.on("update-downloaded", () => {
 });
 
 ipcMain.on("restart_app", async () => {
+  app.isQuiting = true;
   autoUpdater.quitAndInstall(true, false);
 });
 

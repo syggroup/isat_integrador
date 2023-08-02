@@ -172,8 +172,6 @@ class StartService {
 
     try {
       atualizacaoSagi = await this.dados.getForcaAtualizacao();
-
-      if (!atualizacaoSagi) clearTimeout(this.timeoutRun);
     } catch (err) {
       this.writeLog(
         `(${new Date().toLocaleString()}) - Erro verifica atualização SAGI: ${

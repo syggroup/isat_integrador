@@ -471,6 +471,7 @@ class OrdersService {
               await this.ordens.retornoIsat({
                 ordem,
                 situacao: situacao.substr(0, 30),
+                movimenta_cacamba,
               });
 
               if (checks.length > 0) {
@@ -541,11 +542,11 @@ class OrdersService {
                 });
               }
 
-              if (situacao.indexOf("encontrada") !== -1) {
-                this.writeLog(
-                  `(${new Date().toLocaleString()} / ${filial}) - Status da Ordem:${ordem}:${situacao}`
-                );
-              }
+              // if (situacao.indexOf("ENCONTRADA") !== -1) {
+              //  this.writeLog(
+              //    `(${new Date().toLocaleString()} / ${filial}) - Status da Ordem:${ordem}:${situacao}`
+              //  );
+              // }
             })
           );
         }
